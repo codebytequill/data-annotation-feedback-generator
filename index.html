@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Annotation Feedback Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Custom scrollbar for better aesthetics */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #2d3748;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #4a5568;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #718096;
+        }
+        .prose-custom h2 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            border-bottom: 1px solid #4a5568;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+            margin-top: 1.5rem;
+        }
+         .prose-custom h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            margin-top: 1.25rem;
+        }
+        .prose-custom ul {
+            list-style-position: inside;
+            padding-left: 0;
+        }
+        .prose-custom li {
+            margin-bottom: 0.5rem;
+        }
+        .prose-custom code {
+            background-color: #2d3748;
+            color: #f7fafc;
+            padding: 0.2rem 0.4rem;
+            border-radius: 0.25rem;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-200">
+
+    <div class="container mx-auto max-w-4xl p-4 sm:p-6 lg:p-8">
+        <!-- Header -->
+        <header class="text-center mb-8">
+            <h1 class="text-3xl sm:text-4xl font-bold text-white">Data Annotation Feedback Generator</h1>
+            <p class="mt-2 text-gray-400">Create structured, professional feedback to improve quality and showcase your expertise.</p>
+        </header>
+
+        <main class="space-y-6">
+            <!-- Project Details Section -->
+            <section class="bg-gray-800 p-6 rounded-xl shadow-lg">
+                <h2 class="text-xl font-semibold mb-4 border-b border-gray-700 pb-2">1. Project Details</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="projectName" class="block text-sm font-medium text-gray-300 mb-1">Project Name</label>
+                        <input type="text" id="projectName" class="w-full bg-gray-700 border-gray-600 text-white rounded-md p-2 focus:ring-2 focus:ring-teal-500 focus:border-teal-500" placeholder="e.g., Autonomous Vehicle Perception">
+                    </div>
+                    <div>
+                        <label for="reportDate" class="block text-sm font-medium text-gray-300 mb-1">Report Date</label>
+                        <input type="date" id="reportDate" class="w-full bg-gray-700 border-gray-600 text-white rounded-md p-2 focus:ring-2 focus:ring-teal-500 focus:border-teal-500">
+                    </div>
+                </div>
+            </section>
+
+            <!-- General Feedback Section -->
+            <section class="bg-gray-800 p-6 rounded-xl shadow-lg">
+                <h2 class="text-xl font-semibold mb-4 border-b border-gray-700 pb-2">2. General Feedback & Suggestions</h2>
+                <div class="space-y-4">
+                    <div>
+                        <label for="guidelineFeedback" class="block text-sm font-medium text-gray-300 mb-1">Guideline Ambiguity</label>
+                        <textarea id="guidelineFeedback" rows="3" class="w-full bg-gray-700 border-gray-600 text-white rounded-md p-2 focus:ring-2 focus:ring-teal-500 focus:border-teal-500" placeholder="Describe any unclear instructions and suggest specific improvements. e.g., 'The definition of 'partially occluded' is subjective. Suggestion: Define it as >30% of the object being hidden.'"></textarea>
+                    </div>
+                    <div>
+                        <label for="platformFeedback" class="block text-sm font-medium text-gray-300 mb-1">Tool/Platform Suggestions</label>
+                        <textarea id="platformFeedback" rows="3" class="w-full bg-gray-700 border-gray-600 text-white rounded-md p-2 focus:ring-2 focus:ring-teal-500 focus:border-teal-500" placeholder="Suggest improvements for the annotation tool. e.g., 'A hotkey to cycle between common labels (car, pedestrian, cyclist) would improve efficiency.'"></textarea>
+                    </div>
+                    <div>
+                        <label for="efficiencyFeedback" class="block text-sm font-medium text-gray-300 mb-1">Efficiency & Workflow Ideas</label>
+                        <textarea id="efficiencyFeedback" rows="3" class="w-full bg-gray-700 border-gray-600 text-white rounded-md p-2 focus:ring-2 focus:ring-teal-500 focus:border-teal-500" placeholder="Propose ideas to improve the overall workflow. e.g., 'Annotating all objects of one class first, then moving to the next, seems to reduce context-switching time.'"></textarea>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Specific Issues Section -->
+            <section class="bg-gray-800 p-6 rounded-xl shadow-lg">
+                <h2 class="text-xl font-semibold mb-4 border-b border-gray-700 pb-2">3. Specific Item Log</h2>
+                <div id="issueList" class="space-y-4 mb-6">
+                    <!-- Dynamic issues will be added here -->
+                </div>
+                <div class="bg-gray-700 p-4 rounded-lg">
+                    <h3 class="font-semibold mb-2">Add New Issue</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <input type="text" id="itemId" class="bg-gray-800 border-gray-600 text-white rounded-md p-2" placeholder="Item ID / Filename">
+                        <input type="text" id="problemDesc" class="bg-gray-800 border-gray-600 text-white rounded-md p-2" placeholder="Problem Description">
+                        <input type="text" id="suggestion" class="bg-gray-800 border-gray-600 text-white rounded-md p-2" placeholder="Suggested Correction">
+                    </div>
+                    <button id="addIssueBtn" class="mt-4 w-full md:w-auto bg-teal-600 hover:bg-teal-500 text-white font-bold py-2 px-4 rounded-md transition duration-300">Add Issue</button>
+                </div>
+            </section>
+
+            <!-- Generate Report Button -->
+            <div class="text-center">
+                <button id="generateReportBtn" class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-8 text-lg rounded-lg transition duration-300 shadow-lg">Generate Report</button>
+            </div>
+
+            <!-- Report Output Section -->
+            <section id="reportOutputSection" class="bg-gray-800 p-6 rounded-xl shadow-lg hidden">
+                <div class="flex justify-between items-center mb-4 border-b border-gray-700 pb-2">
+                    <h2 class="text-xl font-semibold">4. Generated Report</h2>
+                    <button id="copyReportBtn" class="bg-gray-600 hover:bg-gray-500 text-white font-semibold py-1 px-3 rounded-md transition duration-300 flex items-center">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                        Copy
+                    </button>
+                </div>
+                <div id="reportContent" class="prose prose-custom max-w-none text-gray-300 bg-gray-900 p-4 rounded-md">
+                    <!-- Report content will be injected here -->
+                </div>
+            </section>
+        </main>
+
+        <footer class="text-center mt-12 text-gray-500 text-sm">
+            <p>Created to empower freelance data annotators.</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // State
+            let issues = [];
+            
+            // Set default date
+            document.getElementById('reportDate').valueAsDate = new Date();
+
+            // DOM Elements
+            const addIssueBtn = document.getElementById('addIssueBtn');
+            const generateReportBtn = document.getElementById('generateReportBtn');
+            const copyReportBtn = document.getElementById('copyReportBtn');
+            const issueListDiv = document.getElementById('issueList');
+            const reportOutputSection = document.getElementById('reportOutputSection');
+            const reportContentDiv = document.getElementById('reportContent');
+
+            // --- Functions ---
+
+            /**
+             * Renders the list of issues to the DOM.
+             */
+            const renderIssues = () => {
+                issueListDiv.innerHTML = '';
+                if (issues.length === 0) {
+                    issueListDiv.innerHTML = '<p class="text-gray-500 text-center italic">No specific issues logged yet.</p>';
+                } else {
+                    issues.forEach((issue, index) => {
+                        const issueElement = document.createElement('div');
+                        issueElement.className = 'bg-gray-700/50 p-3 rounded-lg flex flex-col md:flex-row justify-between items-start md:items-center gap-3';
+                        issueElement.innerHTML = `
+                            <div class="flex-grow">
+                                <p class="font-bold text-white">ID: ${issue.id}</p>
+                                <p class="text-sm text-gray-300"><span class="font-semibold">Problem:</span> ${issue.problem}</p>
+                                <p class="text-sm text-gray-400"><span class="font-semibold">Suggestion:</span> ${issue.suggestion}</p>
+                            </div>
+                            <button data-index="${index}" class="remove-issue-btn flex-shrink-0 bg-red-600 hover:bg-red-500 text-white text-xs font-bold py-1 px-2 rounded transition">Remove</button>
+                        `;
+                        issueListDiv.appendChild(issueElement);
+                    });
+                }
+            };
+
+            /**
+             * Adds a new issue to the state and re-renders the list.
+             */
+            const addIssue = () => {
+                const itemIdInput = document.getElementById('itemId');
+                const problemDescInput = document.getElementById('problemDesc');
+                const suggestionInput = document.getElementById('suggestion');
+
+                if (itemIdInput.value.trim() === '' || problemDescInput.value.trim() === '') {
+                    alert('Please provide at least an Item ID and a Problem Description.');
+                    return;
+                }
+
+                issues.push({
+                    id: itemIdInput.value.trim(),
+                    problem: problemDescInput.value.trim(),
+                    suggestion: suggestionInput.value.trim()
+                });
+
+                // Clear inputs
+                itemIdInput.value = '';
+                problemDescInput.value = '';
+                suggestionInput.value = '';
+                itemIdInput.focus();
+
+                renderIssues();
+            };
+
+            /**
+             * Generates the final report string.
+             */
+            const generateReport = () => {
+                const projectName = document.getElementById('projectName').value || 'N/A';
+                const reportDate = document.getElementById('reportDate').value;
+                const guidelineFeedback = document.getElementById('guidelineFeedback').value.trim();
+                const platformFeedback = document.getElementById('platformFeedback').value.trim();
+                const efficiencyFeedback = document.getElementById('efficiencyFeedback').value.trim();
+
+                let reportString = `<h1>Data Annotation Quality Report</h1>`;
+                reportString += `<p><strong>Project:</strong> ${projectName}<br>`;
+                reportString += `<strong>Date:</strong> ${new Date(reportDate).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>`;
+                
+                reportString += `<h2>Executive Summary</h2>`;
+                reportString += `<p>This report details observations and suggestions aimed at improving annotation quality, consistency, and efficiency. Key areas of feedback include guideline clarifications, platform enhancements, and a log of specific item-level issues encountered during the annotation process.</p>`;
+                
+                if(guidelineFeedback) {
+                    reportString += `<h2>Guideline Ambiguity</h2><p>${guidelineFeedback.replace(/\n/g, '<br>')}</p>`;
+                }
+                if(platformFeedback) {
+                    reportString += `<h2>Tool/Platform Suggestions</h2><p>${platformFeedback.replace(/\n/g, '<br>')}</p>`;
+                }
+                if(efficiencyFeedback) {
+                    reportString += `<h2>Efficiency & Workflow Ideas</h2><p>${efficiencyFeedback.replace(/\n/g, '<br>')}</p>`;
+                }
+
+                if (issues.length > 0) {
+                    reportString += `<h2>Specific Item Log</h2><ul>`;
+                    issues.forEach(issue => {
+                        reportString += `<li><strong>Item ID:</strong> <code>${issue.id}</code><ul>`;
+                        reportString += `<li><strong>Problem:</strong> ${issue.problem}</li>`;
+                        if (issue.suggestion) {
+                            reportString += `<li><strong>Suggestion:</strong> ${issue.suggestion}</li>`;
+                        }
+                        reportString += `</ul></li>`;
+                    });
+                    reportString += `</ul>`;
+                }
+
+                reportContentDiv.innerHTML = reportString;
+                reportOutputSection.classList.remove('hidden');
+                reportOutputSection.scrollIntoView({ behavior: 'smooth' });
+            };
+
+            /**
+             * Copies the generated report content to the clipboard.
+             */
+            const copyReport = () => {
+                // We copy the innerHTML and convert it to plain text for pasting into emails
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = reportContentDiv.innerHTML
+                    .replace(/<h1>(.*?)<\/h1>/g, 'Data Annotation Quality Report\n\n')
+                    .replace(/<h2>(.*?)<\/h2>/g, '\n--- $1 ---\n')
+                    .replace(/<h3>(.*?)<\/h3>/g, '\n$1\n')
+                    .replace(/<strong>(.*?)<\/strong>/g, '$1')
+                    .replace(/<code>(.*?)<\/code>/g, '$1')
+                    .replace(/<p>(.*?)<\/p>/g, '$1\n')
+                    .replace(/<br>/g, '\n')
+                    .replace(/<ul>/g, '')
+                    .replace(/<\/ul>/g, '')
+                    .replace(/<li>/g, '* ')
+                    .replace(/<\/li>/g, '\n');
+
+                const reportText = tempDiv.textContent || tempDiv.innerText || "";
+                
+                const textArea = document.createElement('textarea');
+                textArea.value = reportText.trim();
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    copyReportBtn.innerHTML = `
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                        Copied!
+                    `;
+                    setTimeout(() => {
+                         copyReportBtn.innerHTML = `
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                            Copy
+                        `;
+                    }, 2000);
+                } catch (err) {
+                    console.error('Fallback: Oops, unable to copy', err);
+                }
+                document.body.removeChild(textArea);
+            };
+
+
+            // --- Event Listeners ---
+
+            addIssueBtn.addEventListener('click', addIssue);
+            generateReportBtn.addEventListener('click', generateReport);
+            copyReportBtn.addEventListener('click', copyReport);
+
+            issueListDiv.addEventListener('click', (e) => {
+                if (e.target.classList.contains('remove-issue-btn')) {
+                    const index = parseInt(e.target.dataset.index, 10);
+                    issues.splice(index, 1);
+                    renderIssues();
+                }
+            });
+            
+            // Initial render
+            renderIssues();
+        });
+    </script>
+</body>
+</html>
